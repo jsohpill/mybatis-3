@@ -28,6 +28,8 @@ import org.apache.ibatis.reflection.ExceptionUtil;
 /**
  * PreparedStatement proxy to add logging.
  *
+ * PreparedStatement日志增强，用到了JDK的动态代理。
+ *
  * @author Clinton Begin
  * @author Eduardo Macarron
  *

@@ -32,6 +32,8 @@ import org.apache.ibatis.reflection.ExceptionUtil;
 /**
  * ResultSet proxy to add logging.
  *
+ * ResultSet日志增强，用到了JDK的动态代理。
+ *
  * @author Clinton Begin
  * @author Eduardo Macarron
  *

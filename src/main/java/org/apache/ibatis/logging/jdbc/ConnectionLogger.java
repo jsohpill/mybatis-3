@@ -28,6 +28,8 @@ import org.apache.ibatis.reflection.ExceptionUtil;
 /**
  * Connection proxy to add logging.
  *
+ * Connection日志增强，用到了JDK的动态代理。
+ *
  * @author Clinton Begin
  * @author Eduardo Macarron
  *
