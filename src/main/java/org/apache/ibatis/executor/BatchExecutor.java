@@ -87,8 +87,11 @@ public class BatchExecutor extends BaseExecutor {
       Configuration configuration = ms.getConfiguration();
       StatementHandler handler = configuration.newStatementHandler(wrapper, ms, parameterObject, rowBounds, resultHandler, boundSql);
       Connection connection = getConnection(ms.getStatementLog());
+
+      // 返回PreparedStatement
       stmt = handler.prepare(connection, transaction.getTimeout());
       handler.parameterize(stmt);
+
       return handler.query(stmt, resultHandler);
     } finally {
       closeStatement(stmt);

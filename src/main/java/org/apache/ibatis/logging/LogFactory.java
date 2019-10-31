@@ -30,6 +30,16 @@ public final class LogFactory {
 
   private static Constructor<? extends Log> logConstructor;
 
+  /**
+   * Lambda表达式。
+   *
+   * tryImplementation(new Runnable() {
+   *     @Override
+   *     public void run() {
+   *         LogFactory.useSlf4jLogging();
+   *     }
+   * });
+   */
   static {
     tryImplementation(LogFactory::useSlf4jLogging);
     tryImplementation(LogFactory::useCommonsLogging);

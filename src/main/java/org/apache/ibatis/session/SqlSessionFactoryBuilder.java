@@ -26,6 +26,8 @@ import org.apache.ibatis.executor.ErrorContext;
 import org.apache.ibatis.session.defaults.DefaultSqlSessionFactory;
 
 /**
+ * 核心思想是解析出Configuration配置对象，创建DefaultSqlSessionFactory。
+ *
  * Builds {@link SqlSession} instances.
  *
  * @author Clinton Begin
@@ -46,7 +48,10 @@ public class SqlSessionFactoryBuilder {
 
   public SqlSessionFactory build(Reader reader, String environment, Properties properties) {
     try {
+      // 创建XMLConfigBuilder对象
       XMLConfigBuilder parser = new XMLConfigBuilder(reader, environment, properties);
+
+      //解析XML成Configuration，创建SqlSessionFactory对象
       return build(parser.parse());
     } catch (Exception e) {
       throw ExceptionFactory.wrapException("Error building SqlSession.", e);
@@ -74,7 +79,10 @@ public class SqlSessionFactoryBuilder {
 
   public SqlSessionFactory build(InputStream inputStream, String environment, Properties properties) {
     try {
+      // 创建XMLConfigBuilder对象
       XMLConfigBuilder parser = new XMLConfigBuilder(inputStream, environment, properties);
+
+      //解析XML成Configuration，创建SqlSessionFactory对象
       return build(parser.parse());
     } catch (Exception e) {
       throw ExceptionFactory.wrapException("Error building SqlSession.", e);

@@ -333,6 +333,7 @@ public abstract class BaseExecutor implements Executor {
   }
 
   protected Connection getConnection(Log statementLog) throws SQLException {
+    // 实际上通过DataSource获取Connection。
     Connection connection = transaction.getConnection();
     if (statementLog.isDebugEnabled()) {
       return ConnectionLogger.newInstance(connection, statementLog, queryStack);

@@ -30,6 +30,8 @@ import org.apache.ibatis.executor.BatchResult;
 import org.apache.ibatis.reflection.ExceptionUtil;
 
 /**
+ * SqlSessionFactory和SqlSession功能集合。
+ *
  * @author Larry Meadors
  */
 public class SqlSessionManager implements SqlSessionFactory, SqlSession {
@@ -37,6 +39,7 @@ public class SqlSessionManager implements SqlSessionFactory, SqlSession {
   private final SqlSessionFactory sqlSessionFactory;
   private final SqlSession sqlSessionProxy;
 
+  // 当前线程的SqlSession对象。
   private final ThreadLocal<SqlSession> localSqlSession = new ThreadLocal<>();
 
   private SqlSessionManager(SqlSessionFactory sqlSessionFactory) {
@@ -75,6 +78,9 @@ public class SqlSessionManager implements SqlSessionFactory, SqlSession {
     return new SqlSessionManager(sqlSessionFactory);
   }
 
+  /**
+   * 给localSqlSession重新设置。
+   */
   public void startManagedSession() {
     this.localSqlSession.set(openSession());
   }
@@ -340,21 +346,27 @@ public class SqlSessionManager implements SqlSessionFactory, SqlSession {
   private class SqlSessionInterceptor implements InvocationHandler {
     public SqlSessionInterceptor() {
         // Prevent Synthetic Access
+        // 防止综合访问
     }
 
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
       final SqlSession sqlSession = SqlSessionManager.this.localSqlSession.get();
+
+      // 情况一，如果 localSqlSession 中存在 SqlSession 对象，说明是自管理模式
       if (sqlSession != null) {
         try {
           return method.invoke(sqlSession, args);
         } catch (Throwable t) {
           throw ExceptionUtil.unwrapThrowable(t);
         }
+      // 情况二，如果没有 SqlSession 对象，则直接创建一个
       } else {
+        // 创建新的 SqlSession 对象
         try (SqlSession autoSqlSession = openSession()) {
           try {
             final Object result = method.invoke(autoSqlSession, args);
+            // 提交 SqlSession 对象
             autoSqlSession.commit();
             return result;
           } catch (Throwable t) {

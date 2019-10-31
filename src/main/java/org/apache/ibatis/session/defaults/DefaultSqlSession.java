@@ -50,10 +50,22 @@ public class DefaultSqlSession implements SqlSession {
   private final Configuration configuration;
   private final Executor executor;
 
+  // 是否自动提交
   private final boolean autoCommit;
+
+  // 数据是否变更过
   private boolean dirty;
+
+  // 游标数组
   private List<Cursor<?>> cursorList;
 
+  /**
+   * Configuration、Executor、autoCommit。
+   *
+   * @param configuration
+   * @param executor
+   * @param autoCommit
+   */
   public DefaultSqlSession(Configuration configuration, Executor executor, boolean autoCommit) {
     this.configuration = configuration;
     this.executor = executor;
@@ -143,7 +155,10 @@ public class DefaultSqlSession implements SqlSession {
   @Override
   public <E> List<E> selectList(String statement, Object parameter, RowBounds rowBounds) {
     try {
+      // 通过Configuration获取MappedStatement。
       MappedStatement ms = configuration.getMappedStatement(statement);
+
+      // 通过Executor执行查询。
       return executor.query(ms, wrapCollection(parameter), rowBounds, Executor.NO_RESULT_HANDLER);
     } catch (Exception e) {
       throw ExceptionFactory.wrapException("Error querying database.  Cause: " + e, e);

@@ -32,8 +32,14 @@ public class PoolState {
   protected long accumulatedCheckoutTime = 0;
   protected long claimedOverdueConnectionCount = 0;
   protected long accumulatedCheckoutTimeOfOverdueConnections = 0;
+
+  // 累计等待的时间。
   protected long accumulatedWaitTime = 0;
+
+  // 必须等待的线程数量。
   protected long hadToWaitCount = 0;
+
+  // 坏的连接数。
   protected long badConnectionCount = 0;
 
   public PoolState(PooledDataSource dataSource) {

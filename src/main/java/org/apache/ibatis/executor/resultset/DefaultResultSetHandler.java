@@ -177,6 +177,13 @@ public class DefaultResultSetHandler implements ResultSetHandler {
   //
   // HANDLE RESULT SETS
   //
+  /**
+   * 处理Result Set。
+   *
+   * @param stmt
+   * @return
+   * @throws SQLException
+   */
   @Override
   public List<Object> handleResultSets(Statement stmt) throws SQLException {
     ErrorContext.instance().activity("handling results").object(mappedStatement.getId());

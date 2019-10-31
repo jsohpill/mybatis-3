@@ -20,6 +20,8 @@ import java.sql.Connection;
 /**
  * Creates an {@link SqlSession} out of a connection or a DataSource
  *
+ * 定义了openSession和getConfiguration两类方法。
+ *
  * @author Clinton Begin
  */
 public interface SqlSessionFactory {

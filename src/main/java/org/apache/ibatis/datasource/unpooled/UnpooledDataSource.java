@@ -52,6 +52,7 @@ public class UnpooledDataSource implements DataSource {
   private Integer defaultNetworkTimeout;
 
   static {
+    // 初始化Drivers。
     Enumeration<Driver> drivers = DriverManager.getDrivers();
     while (drivers.hasMoreElements()) {
       Driver driver = drivers.nextElement();
@@ -216,6 +217,13 @@ public class UnpooledDataSource implements DataSource {
     return doGetConnection(props);
   }
 
+  /**
+   * 每次获取Connection对象，都要从Dirver中重新获取，重新做网络连接，传入url和properties。
+   *
+   * @param properties
+   * @return
+   * @throws SQLException
+   */
   private Connection doGetConnection(Properties properties) throws SQLException {
     initializeDriver();
     Connection connection = DriverManager.getConnection(url, properties);
@@ -223,6 +231,11 @@ public class UnpooledDataSource implements DataSource {
     return connection;
   }
 
+  /**
+   * 根据driver类型名称，初始化Driver，然后在DriverManager中注册Driver。
+   *
+   * @throws SQLException
+   */
   private synchronized void initializeDriver() throws SQLException {
     if (!registeredDrivers.containsKey(driver)) {
       Class<?> driverType;
@@ -243,6 +256,12 @@ public class UnpooledDataSource implements DataSource {
     }
   }
 
+  /**
+   * 设置Connection的属性，包括网络超时时间，包括autoCommit，包括默认隔离级别。
+   *
+   * @param conn
+   * @throws SQLException
+   */
   private void configureConnection(Connection conn) throws SQLException {
     if (defaultNetworkTimeout != null) {
       conn.setNetworkTimeout(Executors.newSingleThreadExecutor(), defaultNetworkTimeout);

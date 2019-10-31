@@ -41,6 +41,8 @@ public abstract class BaseStatementHandler implements StatementHandler {
   protected final Configuration configuration;
   protected final ObjectFactory objectFactory;
   protected final TypeHandlerRegistry typeHandlerRegistry;
+
+  // ResultSetHandler
   protected final ResultSetHandler resultSetHandler;
   protected final ParameterHandler parameterHandler;
 
@@ -86,7 +88,11 @@ public abstract class BaseStatementHandler implements StatementHandler {
     Statement statement = null;
     try {
       statement = instantiateStatement(connection);
+
+      // 设置statement超时时间
       setStatementTimeout(statement, transactionTimeout);
+
+      // 设置statement的fetch size
       setFetchSize(statement);
       return statement;
     } catch (SQLException e) {
@@ -113,6 +119,12 @@ public abstract class BaseStatementHandler implements StatementHandler {
     StatementUtil.applyTransactionTimeout(stmt, queryTimeout, transactionTimeout);
   }
 
+  /**
+   * 通过mappedStatement和configuration设置fetchSize。
+   *
+   * @param stmt
+   * @throws SQLException
+   */
   protected void setFetchSize(Statement stmt) throws SQLException {
     Integer fetchSize = mappedStatement.getFetchSize();
     if (fetchSize != null) {

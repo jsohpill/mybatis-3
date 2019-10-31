@@ -82,6 +82,11 @@ public class ManagedTransaction implements Transaction {
     }
   }
 
+  /**
+   * 从DataSource中获取Connection。
+   *
+   * @throws SQLException
+   */
   protected void openConnection() throws SQLException {
     if (log.isDebugEnabled()) {
       log.debug("Opening JDBC Connection");
